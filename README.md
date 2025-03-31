@@ -109,7 +109,7 @@ This extension contributes the following settings:
 
 To build and test the extension:
 
-1. Clone the repository: <https://github.com/emdashcodes/vscode-mcp-prompts.git>
+1. Clone the repository: `git clone https://github.com/emdashcodes/vscode-mcp-prompts.git`
 2. Install dependencies:
 
    ```bash
