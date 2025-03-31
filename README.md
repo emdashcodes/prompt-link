@@ -43,23 +43,22 @@ Additionally, you can configure:
 
 - `mcpPrompts.pollingInterval`: Number of seconds between automatic prompt refreshes. Defaults to 300 seconds (5 minutes) if not set or invalid.
 
+Example Server Configuration:
+
 ```json
 {
   "mcpPrompts.servers": [
     {
       "name": "Local Node Server",
-      "path": "node", // Path to the node executable
+      "path": "node",
       "args": [
-        "/Users/me/dev/my-mcp-server/dist/index.js", // Path to the script is the first arg
-        "--port", // Argument for the script
-        "8080"    // Value for the script argument
+        "/Users/me/dev/my-mcp-server/dist/index.js",
       ],
       "env": {
         "PROMPT_FOLDER": "/Users/me/dev/my-prompts"
       }
     },
   ],
-  "mcpPrompts.pollingInterval": 300  // Refresh prompts every 5 minutes
 }
 ```
 

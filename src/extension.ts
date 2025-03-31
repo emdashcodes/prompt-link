@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { Prompt, PromptResponse, PromptRequest, PromptQuickPickItem, TargetOption, MCPServerConfig, TransportOptions } from './types';
+import { Prompt, PromptResponse, PromptRequest, PromptQuickPickItem, TargetOption, MCPServerConfig, TransportOptions, } from './types';
 
 const mcpClients: Map<string, Client> = new Map();
 let activationError = false;

@@ -48,3 +48,8 @@ export interface TransportOptions {
     args: string[];
     env?: Record<string, string>;
 }
+
+export interface PromptQuickPickItem extends vscode.QuickPickItem {
+    prompt: Prompt;
+    serverName: string;
+}
