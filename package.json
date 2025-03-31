@@ -1,0 +1,106 @@
+{
+  "name": "vscode-mcp-prompts",
+  "displayName": "MCP Prompts",
+  "description": "Adds MCP Prompt support to tools like Cursor & RooCode",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "type": "commonjs",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mcp-prompts.insertPrompt",
+        "title": "MCP: Insert Prompt",
+        "category": "MCP Prompts"
+      },
+      {
+        "command": "mcp-prompts.refreshPrompts",
+        "title": "MCP: Refresh Prompts",
+        "category": "MCP Prompts"
+      }
+    ],
+    "configuration": {
+      "title": "MCP Prompts",
+      "properties": {
+        "mcpPrompts.servers": {
+          "type": "array",
+          "default": [],
+          "description": "Configuration for multiple MCP servers.",
+          "items": {
+            "type": "object",
+            "title": "MCP Server Configuration",
+            "required": [
+              "name",
+              "path"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "A unique name to identify this server connection."
+              },
+              "path": {
+                "type": "string",
+                "description": "Path to the MCP server executable."
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "Arguments to pass to the MCP server executable."
+              },
+              "env": {
+                "type": "object",
+                "default": {},
+                "description": "Environment variables to set for the MCP server process.",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "mcp-prompts.insertPrompt",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.56.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0"
+  }
+}
