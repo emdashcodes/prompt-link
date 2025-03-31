@@ -123,7 +123,6 @@ To build and test the extension:
    ```
 
 4. Press F5 in VS Code to launch a new window with the extension loaded
-5. Use the test server in the `test` directory for development
 
 ## Future Plans
 
