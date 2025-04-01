@@ -28,8 +28,8 @@ function getMCPServerConfigs(): MCPServerConfig[] {
     // Validate and deduplicate configs
     const names = new Set<string>();
     return serverConfigs.filter(server => {
-        if (!server.name || !server.path) {
-            console.warn(`Invalid server config: ${JSON.stringify(server)}. Missing 'name' or 'path'.`);
+        if (!server.name || !server.command) {
+            console.warn(`Invalid server config: ${JSON.stringify(server)}. Missing 'name' or 'command'.`);
             vscode.window.showWarningMessage('Invalid MCP server configuration detected. Missing required fields.');
             return false;
         }
@@ -53,7 +53,7 @@ async function createMCPClient(serverConfig: MCPServerConfig): Promise<Client> {
     );
 
     const transportOptions: TransportOptions = {
-        command: serverConfig.path,
+        command: serverConfig.command,
         args: serverConfig.args || [],
         ...(serverConfig.env && { 
             env: Object.fromEntries(

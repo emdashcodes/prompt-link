@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 - 2025-04-01
+
+- Updated configuration to use `command` instead of `path` (to be more consistent with other client configurations).
+
 ## 1.0.3 - 2025-04-01
 
 - Added extension icon.
