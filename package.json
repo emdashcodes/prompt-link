@@ -2,12 +2,13 @@
   "name": "prompt-link",
   "displayName": "PromptLink",
   "description": "Adds MCP Prompt support to tools like Cursor & RooCode",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "emdashcodes",
   "repository": {
     "type": "git",
     "url": "https://github.com/emdashcodes/prompt-link.git"
   },
+  "icon": "images/icon.jpeg",
   "engines": {
     "vscode": "^1.85.0"
   },
