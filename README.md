@@ -111,7 +111,7 @@ This extension contributes the following settings:
 ## Future Enhancements
 
 - Add more integrations
-  - Cursor Chat
+  - Cline
 - Internationalization
 - Tests
 
