@@ -2,7 +2,7 @@
 
 PromptLink is a VS Code extension designed to bridge the gap between the Model Context Protocol (MCP) and popular AI coding assistants like Cursor, RooCode, and GitHub Copilot. It allows users to leverage their MCP prompts seamlessly within their existing VS Code workflows, even if the target tool doesn't have native MCP support.
 
-We welcome contributions of all kinds, from bug fixes and documentation improvements to new features like additional integrations (e.g., Cursor Chat), internationalization, and adding a robust test suite. If you're interested in helping enhance PromptLink, please review the guidelines below.
+We welcome contributions of all kinds, from bug fixes and documentation improvements to new features like additional integrations (e.g., Cline or other things you may use), internationalization, and adding a robust test suite. If you're interested in helping enhance PromptLink, please review the guidelines below.
 
 ## Pull Requests
 
