@@ -292,7 +292,12 @@ async function handleInsertPrompt(): Promise<void> {
             };
 
             const response = await client.getPrompt(promptRequest) as PromptResponse;
-            const promptContent = response.messages?.[0]?.content?.text;
+            // Join all message texts, separated by double newlines
+            const messages = response.messages || [];
+            const promptContent = messages
+                .map(msg => msg?.content?.text)
+                .filter(text => text !== undefined && text !== null)
+                .join('\n\n');
 
             if (!promptContent) {
                 throw new Error('Failed to get prompt content (empty or missing)');
