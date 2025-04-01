@@ -1,6 +1,6 @@
 {
-  "name": "vscode-mcp-prompts",
-  "displayName": "MCP Prompts",
+  "name": "prompt-link",
+  "displayName": "PromptLink",
   "description": "Adds MCP Prompt support to tools like Cursor & RooCode",
   "version": "0.1.0",
   "engines": {
@@ -17,20 +17,20 @@
   "contributes": {
     "commands": [
       {
-        "command": "mcp-prompts.insertPrompt",
-        "title": "MCP: Insert Prompt",
-        "category": "MCP Prompts"
+        "command": "prompt-link.insertPrompt",
+        "title": "PromptLink: Insert Prompt",
+        "category": "PromptLink"
       },
       {
-        "command": "mcp-prompts.refreshPrompts",
-        "title": "MCP: Refresh Prompts",
-        "category": "MCP Prompts"
+        "command": "prompt-link.refreshPrompts",
+        "title": "PromptLink: Refresh Prompts",
+        "category": "PromptLink"
       }
     ],
     "configuration": {
-      "title": "MCP Prompts",
+      "title": "PromptLink",
       "properties": {
-        "mcpPrompts.servers": {
+        "promptLink.servers": {
           "type": "array",
           "default": [],
           "description": "Configuration for multiple MCP servers.",
@@ -73,7 +73,7 @@
     },
     "keybindings": [
       {
-        "command": "mcp-prompts.insertPrompt",
+        "command": "prompt-link.insertPrompt",
         "key": "ctrl+shift+a",
         "mac": "cmd+shift+a"
       }
@@ -92,8 +92,6 @@
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
-    "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.8",
     "eslint": "^8.56.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",

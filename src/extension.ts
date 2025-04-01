@@ -17,11 +17,11 @@ async function executeCommand(command: string, ...args: unknown[]): Promise<void
 }
 
 function getMCPServerConfigs(): MCPServerConfig[] {
-    const config = vscode.workspace.getConfiguration('mcpPrompts');
+    const config = vscode.workspace.getConfiguration('promptLink');
     const serverConfigs = config.get<MCPServerConfig[]>('servers');
 
     if (!serverConfigs?.length) {
-        vscode.window.showWarningMessage('No MCP servers configured. Please configure `mcpPrompts.servers` in your settings.');
+        vscode.window.showWarningMessage('No MCP servers configured. Please configure `promptLink.servers` in your settings.');
         return [];
     }
 
@@ -46,7 +46,7 @@ function getMCPServerConfigs(): MCPServerConfig[] {
 async function createMCPClient(serverConfig: MCPServerConfig): Promise<Client> {
     const client = new Client(
         {
-            name: `vscode-mcp-prompts-client-${serverConfig.name}`,
+            name: `prompt-link-client-${serverConfig.name}`,
             version: "1.0.0"
         },
         { capabilities: { prompts: {} } }
@@ -134,8 +134,6 @@ async function getTargetOptions(): Promise<TargetOption[]> {
             description: "Copy prompt and open Copilot Chat",
             action: async (content: string) => {
                 await vscode.env.clipboard.writeText(content);
-                // We execute the command, but Copilot Chat doesn't automatically take clipboard content AFAIK
-                // So we still need to inform the user to paste.
                 await executeCommand('workbench.action.chat.openEditSession');
                 vscode.window.showInformationMessage('Copied prompt to clipboard. Please paste into GitHub Copilot Chat.');
             }
@@ -193,7 +191,7 @@ function handleMCPError(error: unknown, serverName?: string): void {
 }
 
 function getPollingInterval(): number {
-    const config = vscode.workspace.getConfiguration('mcpPrompts');
+    const config = vscode.workspace.getConfiguration('promptLink');
     const interval = config.get<number>('pollingInterval');
     // Default to 5 minutes if not set or invalid
     return interval && interval > 0 ? interval * 1000 : 5 * 60 * 1000;
@@ -332,7 +330,7 @@ async function handleInsertPrompt(): Promise<void> {
 
 async function handleRefreshPrompts(): Promise<void> {
     if (mcpClients.size === 0) {
-        vscode.window.showInformationMessage('No MCP servers connected. Cannot refresh prompts.');
+        vscode.window.showInformationMessage('No PromptLink servers connected. Cannot refresh prompts.');
         return;
     }
 
@@ -369,7 +367,7 @@ async function handleRefreshPrompts(): Promise<void> {
 
 // Extension Activation
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
-    console.log('MCP Prompts extension activating...');
+    console.log('PromptLink extension activating...');
     activationError = false;
     mcpClients.clear();
 
@@ -390,9 +388,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     const keybindingText = await getKeybindingText();
     const status = mcpClients.size > 0
-        ? `MCP Prompts: ${mcpClients.size} server(s) connected. Use ${keybindingText} to insert prompts.`
+        ? `PromptLink: ${mcpClients.size} MCP server(s) connected. Use ${keybindingText} to insert prompts.`
         : activationError
-            ? 'MCP Prompts: No servers connected. Check configuration and server status.'
+            ? 'PromptLink: No MCP servers connected. Check configuration and server status.'
             : '';
 
     if (status) {
@@ -401,19 +399,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     // Register Commands
     context.subscriptions.push(
-        vscode.commands.registerCommand('mcp-prompts.insertPrompt', handleInsertPrompt),
-        vscode.commands.registerCommand('mcp-prompts.refreshPrompts', handleRefreshPrompts)
+        vscode.commands.registerCommand('prompt-link.insertPrompt', handleInsertPrompt),
+        vscode.commands.registerCommand('prompt-link.refreshPrompts', handleRefreshPrompts)
     );
 
     // Watch for configuration changes
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(async (e) => {
-            if (e.affectsConfiguration('mcpPrompts.servers')) {
-                vscode.window.showInformationMessage('MCP server configuration changed. Reloading connections...');
+            if (e.affectsConfiguration('promptLink.servers')) {
+                vscode.window.showInformationMessage('PromptLink server configuration changed. Reloading MCP server connections...');
                 mcpClients.clear();
                 await activate(context);
                 vscode.window.showInformationMessage('MCP server connections reloaded.');
-            } else if (e.affectsConfiguration('mcpPrompts.pollingInterval')) {
+            } else if (e.affectsConfiguration('promptLink.pollingInterval')) {
                 startPolling();
             }
         })
@@ -425,7 +423,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 async function getKeybindingText(): Promise<string> {
     const keybindings = await vscode.commands.getCommands();
-    if (keybindings.includes('mcp-prompts.insertPrompt')) {
+    if (keybindings.includes('prompt-link.insertPrompt')) {
         // Use the default keybinding if no custom one is set
         return 'Cmd+Shift+A (Mac) / Ctrl+Shift+A (Windows/Linux)';
     }
@@ -434,7 +432,7 @@ async function getKeybindingText(): Promise<string> {
 
 // Extension Deactivation
 export function deactivate(): Thenable<void> | undefined {
-    console.log('MCP Prompts extension deactivating...');
+    console.log('PromptLink extension deactivating...');
     stopPolling();
     mcpClients.clear();
     return Promise.resolve();

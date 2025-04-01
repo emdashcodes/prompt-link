@@ -1,11 +1,12 @@
-# VS Code MCP Prompts Extension
+# PromptLink - MCP Prompt Integration for VS Code
 
-This extension adds support for Model Context Protocol (MCP) prompts to VS Code, enabling you to use MCP prompts with AI tools like Cursor and RooCode. It acts as a bridge, allowing these tools to work with MCP prompts even though they don't natively support them. The extension provides a seamless way to insert structured prompts into your AI-assisted development workflow.
+This extension adds support for [Model Context Protocol (MCP) prompts](https://modelcontextprotocol.io/docs/concepts/prompts) to VS Code, enabling you to use MCP prompts with AI tools like Cursor, RooCode, and GitHub Copilot. It acts as a bridge, allowing you to easily use MCP prompts in them even though they don't natively support them.
 
 ## Features
 
 - Support for multiple MCP servers
 - Direct integration with RooCode, Cursor, and GitHub Copilot
+- Fallback to clipboard for everything else
 - Automatic polling for prompt updates
 - Configurable keyboard shortcuts
 
@@ -14,16 +15,17 @@ This extension adds support for Model Context Protocol (MCP) prompts to VS Code,
 - Visual Studio Code version 1.85.0 or higher
 - (Optional) RooCode extension for direct context insertion
 - (Optional) Cursor extension for direct chat integration
+- (Optional) GitHub Copilot extension for direct chat integration
 
 ## Installation
 
-1. Install the extension from the VS Code marketplace
+1. Install the extension from the VS Code marketplace or GitHub
 2. Configure the path to your MCP server (see Configuration section)
-3. (Optional) Install RooCode and/or Cursor
+3. (Optional) Install RooCode, Cursor, or GitHub Copilot
 
 ## Configuration
 
-This extension connects to one or more MCP servers defined in your VS Code settings using the `mcpPrompts.servers` property. This property is an array, where each object in the array defines a connection to a single MCP server.
+This extension connects to one or more MCP servers defined in your VS Code settings using the `promptLink.servers` property. This property is an array, where each object in the array defines a connection to a single MCP server.
 
 Each server configuration object requires:
 
@@ -41,13 +43,13 @@ And optionally accepts:
 
 Additionally, you can configure:
 
-- `mcpPrompts.pollingInterval`: Number of seconds between automatic prompt refreshes. Defaults to 300 seconds (5 minutes) if not set or invalid.
+- `promptLink.pollingInterval`: Number of seconds between automatic prompt refreshes. Defaults to 300 seconds (5 minutes) if not set or invalid.
 
 Example Server Configuration:
 
 ```json
 {
-  "mcpPrompts.servers": [
+  "promptLink.servers": [
     {
       "name": "Local Node Server",
       "path": "node",
@@ -67,7 +69,7 @@ You can customize the keyboard shortcuts in your `keybindings.json` file. For ex
 ```json
 {
   "key": "ctrl+shift+a",
-  "command": "mcp-prompts.insertPrompt"
+  "command": "prompt-link.insertPrompt"
 }
 ```
 
@@ -86,13 +88,13 @@ Configure these settings in your User or Workspace `settings.json` file.
 
 You can also:
 
-- Use the command palette and search for "MCP: Insert Prompt"
-- Use the command palette and search for "MCP: Refresh Prompts" to refresh the list of available prompts from all connected servers.
+- Use the command palette and search for "PromptLink: Insert Prompt"
+- Use the command palette and search for "PromptLink: Refresh Prompts" to refresh the list of available prompts from all connected servers.
 
 ## Commands
 
-- `MCP: Insert Prompt` - Open the prompt selector
-- `MCP: Refresh Prompts` - Refresh the list of available prompts
+- `PromptLink: Insert Prompt` - Open the prompt selector
+- `PromptLink: Refresh Prompts` - Refresh the list of available prompts
 
 ## Keyboard Shortcuts
 
@@ -103,14 +105,14 @@ You can also:
 
 This extension contributes the following settings:
 
-- `mcpPrompts.servers`: An array of MCP server configurations. See the [Configuration](#configuration) section for details.
-- `mcpPrompts.pollingInterval`: Number of seconds between automatic prompt refreshes (default: 300 seconds / 5 minutes).
+- `promptLink.servers`: An array of MCP server configurations. See the [Configuration](#configuration) section for details.
+- `promptLink.pollingInterval`: Number of seconds between automatic prompt refreshes (default: 300 seconds / 5 minutes).
 
 ## Development
 
 To build and test the extension:
 
-1. Clone the repository: `git clone https://github.com/emdashcodes/vscode-mcp-prompts.git`
+1. Clone the repository: `git clone https://github.com/emdashcodes/prompt-link.git`
 2. Install dependencies:
 
    ```bash
@@ -138,13 +140,13 @@ Initial release:
 
 - Connect to one or more MCP servers defined in VS Code settings.
 - Lists available prompts from all connected servers.
-- Execute the `MCP: Insert Prompt` command (via command palette or keyboard shortcut) to open the prompt selector.
+- Execute the `PromptLink: Insert Prompt` command (via command palette or keyboard shortcut) to open the prompt selector.
 - Handle prompts with required or optional arguments, prompting the user for input.
 - Send the final prompt content to:
   - RooCode context (if installed).
   - Cursor chat (if installed).
   - System clipboard.
-- Execute the `MCP: Refresh Prompts` command to manually update the prompt list.
-- Automatically refresh prompts in the background based on the `mcpPrompts.pollingInterval` setting.
-- Configure server connections using `mcpPrompts.servers` (including path, args, env).
+- Execute the `PromptLink: Refresh Prompts` command to manually update the prompt list.
+- Automatically refresh prompts in the background based on the `promptLink.pollingInterval` setting.
+- Configure server connections using `promptLink.servers` (including path, args, env).
 - Default keyboard shortcut: `Cmd+Shift+A` (Mac) / `Ctrl+Shift+A` (Windows/Linux).
