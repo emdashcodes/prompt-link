@@ -117,8 +117,8 @@ This extension contributes the following settings:
 
 ## Release Notes
 
-See [CHANGELOG.md](CHANGELOG.md)
+See [CHANGELOG](CHANGELOG.md)
 
 ## Contributing & Development Instructions
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING](CONTRIBUTING.md)
