@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 2025-04-01
+
+- Changed prompt refresh notification to only appear on extension startup, not on every background poll. Manual refresh still shows a notification.
+
 ## 1.0.1 - 2025-04-01
 
 - Initial Public Release
