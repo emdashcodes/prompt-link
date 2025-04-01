@@ -19,7 +19,7 @@ This extension adds support for [Model Context Protocol (MCP) prompts](https://m
 
 ## Installation
 
-1. Install the extension from the VS Code marketplace or GitHub
+1. Install the extension from the [VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=emdashcodes.prompt-link) or GitHub
 2. Configure the path to your MCP server (see Configuration section)
 3. (Optional) Install RooCode, Cursor, or GitHub Copilot
 
