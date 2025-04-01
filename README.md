@@ -5,7 +5,7 @@ This extension adds support for Model Context Protocol (MCP) prompts to VS Code,
 ## Features
 
 - Support for multiple MCP servers
-- Direct integration with RooCode and Cursor
+- Direct integration with RooCode, Cursor, and GitHub Copilot
 - Automatic polling for prompt updates
 - Configurable keyboard shortcuts
 
@@ -79,9 +79,10 @@ Configure these settings in your User or Workspace `settings.json` file.
 2. Select a prompt from the list. Prompts are prefixed with the server name (e.g., `[Server Name]: Prompt Name`).
 3. If the prompt has parameters, enter them when prompted
 4. Choose where to send the prompt:
-   - RooCode: Adds the prompt to RooCode's context (if installed)
-   - Cursor: Opens the prompt in Cursor's chat (if installed)
-   - Clipboard: Copies the prompt for manual pasting
+   - RooCode: Copies to your clipboard and opens RooCode (if installed)
+   - Cursor: Copies to your clipboard and opens Cursor (if installed)
+   - GitHub Copilot: Copies to your clipboard and opens Copilot (if installed)
+   - Clipboard: Copies the prompt for manual pasting somewhere else
 
 You can also:
 

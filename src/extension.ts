@@ -128,6 +128,21 @@ async function getTargetOptions(): Promise<TargetOption[]> {
         });
     }
 
+    if (availableCommands.includes('workbench.action.chat.openEditSession')) {
+        options.push({
+            label: "Send to GitHub Copilot",
+            description: "Copy prompt and open Copilot Chat",
+            action: async (content: string) => {
+                await vscode.env.clipboard.writeText(content);
+                // We execute the command, but Copilot Chat doesn't automatically take clipboard content AFAIK
+                // So we still need to inform the user to paste.
+                await executeCommand('workbench.action.chat.openEditSession');
+                vscode.window.showInformationMessage('Copied prompt to clipboard. Please paste into GitHub Copilot Chat.');
+            }
+        });
+    }
+
+
     options.push({
         label: "Copy to Clipboard",
         description: "Copy for manual pasting",
