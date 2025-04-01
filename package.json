@@ -2,7 +2,7 @@
   "name": "prompt-link",
   "displayName": "PromptLink",
   "description": "Adds MCP Prompt support to tools like Cursor & RooCode",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "emdashcodes",
   "repository": {
     "type": "git",
@@ -57,16 +57,16 @@
             "title": "MCP Server Configuration",
             "required": [
               "name",
-              "path"
+              "command"
             ],
             "properties": {
               "name": {
                 "type": "string",
                 "description": "A unique name to identify this server connection."
               },
-              "path": {
+              "command": {
                 "type": "string",
-                "description": "Path to the MCP server executable."
+                "description": "The command used to execute the MCP server (e.g., path to executable, 'node', 'python')."
               },
               "args": {
                 "type": "array",

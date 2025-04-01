@@ -20,7 +20,7 @@ This extension adds support for [Model Context Protocol (MCP) prompts](https://m
 ## Installation
 
 1. Install the extension from the [VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=emdashcodes.prompt-link) or GitHub
-2. Configure the path to your MCP server (see Configuration section)
+2. Configure your MCP servers (see Configuration section)
 3. (Optional) Install RooCode, Cursor, or GitHub Copilot
 
 ## Configuration
@@ -30,15 +30,13 @@ This extension connects to one or more MCP servers defined in your VS Code setti
 Each server configuration object requires:
 
 - `name`: A unique string to identify this server connection (e.g., "Local Prompts", "Perplexity Server"). This name will be shown in the prompt list.
-- `path`: The command or file path to the **executable** used to run the MCP server.
+- `command`: The command used to execute the MCP server (e.g., path to executable, 'node', 'python').
   - For binary executables or directly executable scripts (e.g., shell scripts with a shebang), this is the path to the file.
-  - For interpreted scripts (e.g., Node.js, Python), this should be the path to the interpreter (`node`, `python3`, etc.).
+  - For interpreted scripts (e.g., Node.js), this should be the interpreter command (`node`).
 
 And optionally accepts:
 
 - `args`: An array of strings representing command-line arguments.
-  - If `path` is an interpreter (like `node`), the **first argument** in this array should typically be the path to the script file to execute. Subsequent elements are arguments passed *to that script*.
-  - If `path` is a direct executable, these are the arguments passed *to that executable*.
 - `env`: An object containing environment variables to set for the server process. These are merged with the system's environment variables.
 
 Additionally, you can configure:
@@ -52,7 +50,7 @@ Example Server Configuration:
   "promptLink.servers": [
     {
       "name": "Local Node Server",
-      "path": "node",
+      "command": "node",
       "args": [
         "/Users/me/dev/my-mcp-server/dist/index.js",
       ],

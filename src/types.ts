@@ -38,7 +38,7 @@ export interface TargetOption extends vscode.QuickPickItem {
 
 export interface MCPServerConfig {
     name: string;
-    path: string;
+    command: string;
     args?: string[];
     env?: Record<string, string>;
 }
