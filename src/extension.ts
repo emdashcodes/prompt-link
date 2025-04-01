@@ -203,10 +203,16 @@ function startPolling(): void {
     }
     
     const interval = getPollingInterval();
-    pollingInterval = setInterval(() => {
-        handleRefreshPrompts().catch(error => {
-            console.error('Error during polling refresh:', error);
-        });
+    pollingInterval = setInterval(async () => { // Make async
+        try {
+            // Call internal refresh silently, we don't need to show a toast every time it automatically refreshes
+            const { errorOccurred } = await _refreshPromptsInternal();
+            if (errorOccurred) {
+                console.warn('Error during silent background prompt refresh. Check logs for details.');
+            }
+        } catch (error) {
+            console.error('Unexpected error during polling refresh:', error);
+        }
     }, interval);
 }
 
@@ -328,10 +334,11 @@ async function handleInsertPrompt(): Promise<void> {
     promptPicker.show();
 }
 
-async function handleRefreshPrompts(): Promise<void> {
+// Internal function to refresh prompts without showing notifications
+async function _refreshPromptsInternal(): Promise<{ totalPrompts: number; errorOccurred: boolean }> {
     if (mcpClients.size === 0) {
-        vscode.window.showInformationMessage('No PromptLink servers connected. Cannot refresh prompts.');
-        return;
+        console.log('No PromptLink servers connected. Cannot refresh prompts internally.');
+        return { totalPrompts: 0, errorOccurred: false }; // No servers isn't an error in this context
     }
 
     let totalPrompts = 0;
@@ -345,8 +352,10 @@ async function handleRefreshPrompts(): Promise<void> {
                 return count;
             } catch (error) {
                 refreshErrorOccurred = true;
-                console.error(`Failed to refresh prompts from server "${serverName}":`, error);
-                vscode.window.showErrorMessage(`Failed to refresh prompts from server "${serverName}": ${error instanceof Error ? error.message : String(error)}`);
+                // Log error instead of showing message
+                console.error(`Failed to refresh prompts from server "${serverName}" during internal check:`, error);
+                // Optionally show error only if manually triggered? For now, just log.
+                // vscode.window.showErrorMessage(`Failed to refresh prompts from server "${serverName}": ${error instanceof Error ? error.message : String(error)}`);
                 return 0;
             }
         });
@@ -354,15 +363,42 @@ async function handleRefreshPrompts(): Promise<void> {
         const counts = await Promise.all(refreshPromises);
         totalPrompts = counts.reduce((sum, count) => sum + count, 0);
 
-        if (!refreshErrorOccurred) {
-            vscode.window.showInformationMessage(`MCP Prompts refreshed - ${totalPrompts} prompts available across ${mcpClients.size} server(s).`);
-        } else {
-            vscode.window.showWarningMessage(`MCP Prompts refreshed with errors. ${totalPrompts} prompts available across ${mcpClients.size} server(s). Check logs for details.`);
-        }
     } catch (error) {
-        console.error("Unexpected error aggregating refresh counts:", error);
-        vscode.window.showErrorMessage('An unexpected error occurred while refreshing prompts.');
+        refreshErrorOccurred = true; // Indicate error on aggregation failure
+        console.error("Unexpected error aggregating internal refresh counts:", error);
+        // Optionally show error only if manually triggered? For now, just log.
+        // vscode.window.showErrorMessage('An unexpected error occurred while refreshing prompts internally.');
     }
+
+    return { totalPrompts, errorOccurred: refreshErrorOccurred };
+}
+
+// Command handler: Refreshes prompts and shows notification
+async function handleRefreshPrompts(): Promise<void> {
+    if (mcpClients.size === 0) {
+        vscode.window.showInformationMessage('No PromptLink servers connected. Cannot refresh prompts.');
+        return;
+    }
+
+    vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: "Refreshing MCP Prompts...",
+        cancellable: false
+    }, async (progress) => {
+        try {
+            const { totalPrompts, errorOccurred } = await _refreshPromptsInternal();
+
+            if (!errorOccurred) {
+                vscode.window.showInformationMessage(`MCP Prompts refreshed - ${totalPrompts} prompts available across ${mcpClients.size} server(s).`);
+            } else {
+                vscode.window.showWarningMessage(`MCP Prompts refreshed with errors. ${totalPrompts} prompts available across ${mcpClients.size} server(s). Check logs for details.`);
+            }
+        } catch (error) {
+            // Catch errors from _refreshPromptsInternal if any slip through (shouldn't happen often with current logic)
+            console.error("Unexpected error during manual refresh:", error);
+            vscode.window.showErrorMessage('An unexpected error occurred while refreshing prompts.');
+        }
+    });
 }
 
 // Extension Activation
@@ -386,15 +422,43 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await Promise.all(connectionPromises);
     }
 
+    let initialPromptCount = 0;
+    let initialRefreshError = false;
+    if (mcpClients.size > 0 && !activationError) {
+        // Perform initial silent refresh to get count for startup message
+        try {
+            const { totalPrompts, errorOccurred } = await _refreshPromptsInternal();
+            initialPromptCount = totalPrompts;
+            initialRefreshError = errorOccurred;
+            if (initialRefreshError) {
+                 console.warn('Error during initial prompt fetch on activation. Check logs.');
+            }
+        } catch (error) {
+            console.error("Unexpected error during initial prompt fetch:", error);
+            initialRefreshError = true; // Mark error if the fetch itself fails
+        }
+    }
+
     const keybindingText = await getKeybindingText();
-    const status = mcpClients.size > 0
-        ? `PromptLink: ${mcpClients.size} MCP server(s) connected. Use ${keybindingText} to insert prompts.`
-        : activationError
-            ? 'PromptLink: No MCP servers connected. Check configuration and server status.'
-            : '';
+    let status = '';
+    if (mcpClients.size > 0) {
+        status = `PromptLink: ${mcpClients.size} MCP server(s) connected, ${initialPromptCount} prompts available. Use ${keybindingText} to insert prompts.`;
+        if (initialRefreshError) {
+            status += ' (Initial prompt fetch had errors)';
+        }
+    } else if (activationError) {
+        status = 'PromptLink: Failed to connect to some/all MCP servers. Check configuration and server status.';
+    }
+    // If no servers configured and no errors, status remains empty (no message needed)
+
 
     if (status) {
-        vscode.window.showInformationMessage(status);
+        // Use showWarningMessage if there were activation or initial refresh errors
+        if (activationError || initialRefreshError) {
+            vscode.window.showWarningMessage(status);
+        } else {
+            vscode.window.showInformationMessage(status);
+        }
     }
 
     // Register Commands
