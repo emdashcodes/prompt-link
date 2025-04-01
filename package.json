@@ -2,7 +2,7 @@
   "name": "prompt-link",
   "displayName": "PromptLink",
   "description": "Adds MCP Prompt support to tools like Cursor & RooCode",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -18,12 +18,12 @@
     "commands": [
       {
         "command": "prompt-link.insertPrompt",
-        "title": "PromptLink: Insert Prompt",
+        "title": "MCP Prompts - Insert Prompt",
         "category": "PromptLink"
       },
       {
         "command": "prompt-link.refreshPrompts",
-        "title": "PromptLink: Refresh Prompts",
+        "title": "MCP Prompts - Refresh Prompts",
         "category": "PromptLink"
       }
     ],

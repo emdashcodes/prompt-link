@@ -1,10 +1,9 @@
 # Changelog
 
-## 0.1.0
+## 1.0.0 - 2025-04-01
 
-Initial release:
-
-- Connect to one or more MCP servers defined in VS Code settings.
+- Initial Public Release
+- Connects to one or more MCP servers defined in VS Code settings.
 - Lists available prompts from all connected servers.
 - Execute the `PromptLink: Insert Prompt` command (via command palette or keyboard shortcut) to open the prompt selector.
 - Handle prompts with required or optional arguments, prompting the user for input.
