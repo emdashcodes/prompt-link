@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.0.0 - 2025-04-01
+## 1.0.1 - 2025-04-01
+
+- Initial Public Release
+- Listed in extension marketplace
+- Updated documentation (`README.md`, `CONTRIBUTING.md`).
+
+## 1.0.0 - 2025-03-31
 
 - Initial Public Release
 - Connects to one or more MCP servers defined in VS Code settings.
